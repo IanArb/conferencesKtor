@@ -1,4 +1,11 @@
 FROM openjdk:8-jre-alpine
+FROM gradle:6.5-jdk8-alpine
+
+USER root                # This changes default user to root
+RUN chown -R gradle /app # This changes ownership of folder
+USER gradle              # This changes the user back to the default user "gradle"
+
+RUN ./gradlew build --stacktrace
 
 ENV APPLICATION_USER ktor
 RUN adduser -D -g '' $APPLICATION_USER
