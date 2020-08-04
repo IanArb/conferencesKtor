@@ -1,13 +1,5 @@
 FROM openjdk:8
 
-ENV APPLICATION_USER ktor
-RUN adduser -D -g '' $APPLICATION_USER
-
-RUN mkdir /app
-RUN chown -R $APPLICATION_USER /app
-
-USER $APPLICATION_USER
-
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
 COPY build.gradle.kts settings.gradle.kts gradlew gradle.properties $APP_HOME
@@ -15,6 +7,16 @@ COPY gradle $APP_HOME/gradle
 RUN ./gradlew build || return 0
 COPY . .
 RUN ./gradlew build
+
+FROM openjdk:8-jre-alpine
+
+ENV APPLICATION_USER ktor
+RUN adduser -D -g '' $APPLICATION_USER
+
+RUN mkdir /app
+RUN chown -R $APPLICATION_USER /app
+
+USER $APPLICATION_USER
 
 COPY ./build/libs/conferences-api-0.0.1-all.jar /app/conferences-api-0.0.1-all.jar
 WORKDIR /build
