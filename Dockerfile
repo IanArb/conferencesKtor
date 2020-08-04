@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8
 
 ENV APP_HOME=/usr/app/
 WORKDIR $APP_HOME
@@ -7,8 +7,6 @@ COPY gradle $APP_HOME/gradle
 RUN ./gradlew build || return 0
 COPY . .
 RUN ./gradlew build
-
-RUN ./gradlew build --stacktrace
 
 ENV APPLICATION_USER ktor
 RUN adduser -D -g '' $APPLICATION_USER
