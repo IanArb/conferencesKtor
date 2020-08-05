@@ -17,7 +17,7 @@ group = "com.ianarbuckle.conferences"
 version = "0.0.1"
 
 application {
-    mainClassName = "com.ianarbuckle.conferences.ApplicationKt"
+    mainClassName = "com.ianarbuckle.conferencesapi.ApplicationKt"
 }
 
 apply(plugin = "com.github.johnrengelman.shadow")
