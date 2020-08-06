@@ -14,7 +14,7 @@ You can configure your port and your mongo URI in the ``application.conf`` file
 ```
 ktor {
     deployment {
-        port = 8080
+        port = ${PORT}
     }
     application {
         modules = [ com.ianarbuckle.conferencesapi.ApplicationKt.module ]
