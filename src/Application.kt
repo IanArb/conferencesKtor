@@ -3,6 +3,7 @@ package com.ianarbuckle.conferencesapi
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.ianarbuckle.conferencesapi.controller.conferenceRoutes
 import com.ianarbuckle.conferencesapi.di.appModule
+import com.ianarbuckle.conferencesapi.repository.ConferenceRepository
 import com.ianarbuckle.conferencesapi.service.ConferenceService
 import io.ktor.application.*
 import io.ktor.features.CORS
@@ -44,16 +45,22 @@ fun Application.module(testing: Boolean = false) {
         modules(appModule)
     }
 
-    val service: ConferenceService by inject()
-
     val uri = environment.config.property("ktor.mongoUri").getString()
 
     val coroutineClient: CoroutineClient by inject {
         parametersOf(uri)
     }
 
+    val repository: ConferenceRepository by inject {
+        parametersOf(coroutineClient)
+    }
+
+    val service: ConferenceService by inject {
+        parametersOf(repository)
+    }
+
     routing {
-        conferenceRoutes(service, coroutineClient)
+        conferenceRoutes(service)
     }
 
 }

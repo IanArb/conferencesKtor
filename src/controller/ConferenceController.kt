@@ -10,18 +10,18 @@ import io.ktor.routing.*
 import org.litote.kmongo.coroutine.CoroutineClient
 import org.litote.kmongo.updateMany
 
-fun Route.conferenceRoutes(service: ConferenceService, coroutineClient: CoroutineClient) {
+fun Route.conferenceRoutes(service: ConferenceService) {
 
     route("/conferences") {
 
         get {
-            call.respond(HttpStatusCode.OK, service.findAll(coroutineClient))
+            call.respond(HttpStatusCode.OK, service.findAll())
         }
 
         get("/{id}") {
             val id = call.parameters["id"]
             id?.let {
-                service.findOne(id, coroutineClient)?.let { conference ->
+                service.findOne(id)?.let { conference ->
                     call.respond(
                         HttpStatusCode.OK, conference
                     )
@@ -30,21 +30,22 @@ fun Route.conferenceRoutes(service: ConferenceService, coroutineClient: Coroutin
         }
 
         post<Conference>("") { request ->
-            service.insertEntity(request, coroutineClient)
+            service.insertEntity(request)
 
             call.respond(HttpStatusCode.Created)
         }
 
         put("") {
             val requestBody = call.receiveOrNull<Conference>()
-            call.respond(HttpStatusCode.OK, service.updateEntity(requestBody, coroutineClient))
+            requestBody?.let {
+                call.respond(HttpStatusCode.OK, service.updateEntity(it))
+            }
         }
 
         delete("/{id}") {
-            val id = call.parameters["id"]
-            id?.let {
-                call.respond(HttpStatusCode.OK, service.deleteEntity(call.parameters["id"]!!, coroutineClient))
-            }
+            val parameters = call.parameters
+            val id = parameters.entries().find { it.key == "id" }?.value?.first()
+            call.respond(HttpStatusCode.OK, service.deleteEntity(id ?: ""))
         }
 
     }
