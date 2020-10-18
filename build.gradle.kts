@@ -5,10 +5,13 @@ val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val koin_version: String by project
+val mockk_version: String by project
+val kmongo_version: String by project
+val coroutines_version: String by project
 
 plugins {
     application
-    kotlin("jvm") version "1.4.0"
+    kotlin("jvm") version "1.4.10"
     distribution
     id("com.github.johnrengelman.shadow") version "5.2.0"
 }
@@ -37,10 +40,14 @@ dependencies {
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 
     //Mongo
-    implementation("org.litote.kmongo:kmongo-coroutine:4.0.1")
+    implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version")
 
     implementation("org.koin:koin-ktor:$koin_version")
     implementation("org.koin:koin-core:$koin_version")
+
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("io.mockk:mockk:$mockk_version")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")

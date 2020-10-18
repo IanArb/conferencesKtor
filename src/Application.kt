@@ -6,8 +6,7 @@ import com.ianarbuckle.conferencesapi.di.appModule
 import com.ianarbuckle.conferencesapi.repository.ConferenceRepository
 import com.ianarbuckle.conferencesapi.service.ConferenceService
 import io.ktor.application.*
-import io.ktor.features.CORS
-import io.ktor.features.ContentNegotiation
+import io.ktor.features.*
 import io.ktor.http.HttpMethod
 import io.ktor.jackson.jackson
 import io.ktor.routing.routing
@@ -26,6 +25,8 @@ fun main(args: Array<String>) {
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
+
+    install(DefaultHeaders)
 
     install(ContentNegotiation) {
         jackson {
@@ -64,4 +65,3 @@ fun Application.module(testing: Boolean = false) {
     }
 
 }
-
