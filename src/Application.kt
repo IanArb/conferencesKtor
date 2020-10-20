@@ -39,7 +39,7 @@ fun Application.module(testing: Boolean = false) {
         method(HttpMethod.Put)
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
-        anyHost() //TODO Don't do this in production
+        anyHost()
     }
 
     install(Koin) {

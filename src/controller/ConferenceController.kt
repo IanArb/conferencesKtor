@@ -20,14 +20,13 @@ fun Route.conferenceRoutes(service: ConferenceService) {
 
         get("/{id}") {
             val parameters = call.parameters
-            val id = parameters.entries().find { it.key == "id" }?.value?.first()
+            val id = parameters.entries().find { it.key == "id" }?.value?.firstOrNull()
             val findConference = service.findOne(id ?: "")
             findConference?.let { conference -> call.respond(HttpStatusCode.OK, conference) }
         }
 
         post<Conference>("") { request ->
-            service.insertEntity(request)
-            call.respond(HttpStatusCode.Created)
+            call.respond(HttpStatusCode.Created, service.insertEntity(request))
         }
 
         put("") {
